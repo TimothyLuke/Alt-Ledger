@@ -1,0 +1,72 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - "*"
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+# Queue rather than cancel: a half-finished publish is worse than a late one.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: leafo/gh-actions-lua@v10
+        with:
+          luaVersion: "5.1.5"
+
+      - name: Luacheck
+        uses: nebularg/actions-luacheck@v1
+        with:
+          args: -q
+
+      - uses: leafo/gh-actions-luarocks@v4
+
+      - name: Install busted
+        run: luarocks install busted
+
+      - name: Unit tests
+        run: busted -o utfTerminal
+
+      # Everything below builds and publishes; pull requests stop at the tests.
+
+      - name: Setup Node
+        if: ${{ github.event_name != 'pull_request' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install SVN
+        if: ${{ github.event_name != 'pull_request' }}
+        run: sudo apt-get install -y subversion
+
+      # Before packaging: hand CurseForge the enUS phrase list this build was
+      # made from, so translators are offered every string a release ships.
+      # The upload deletes phrases no longer in Localization/enUS.lua.
+      - name: Upload enUS localization to CurseForge
+        if: ${{ github.event_name != 'pull_request' }}
+        continue-on-error: true
+        run: npm run upload-locale
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
+
+      - name: Package
+        uses: BigWigsMods/packager@master
+        if: ${{ github.event_name != 'pull_request' }}
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,32 @@
+## Interface: 11509, 16001, 20506, 50504, 120105, 120107
+
+## Title: |cff33ff99Alt Ledger|r
+## Notes: Remembers what your characters carry and how much gold they have, and shows on item tooltips which of your other characters hold a tradeable or warbound copy.
+## Author: TimothyLuke
+## Version: @project-version@
+## IconTexture: Interface\Icons\INV_Misc_Bag_08
+## SavedVariables: AltLedgerDB
+
+embeds.xml
+Core\Init.lua
+
+Localization\enUS.lua
+Localization\deDE.lua
+Localization\esES.lua
+Localization\esMX.lua
+Localization\frFR.lua
+Localization\itIT.lua
+Localization\koKR.lua
+Localization\ptBR.lua
+Localization\ruRU.lua
+Localization\zhCN.lua
+Localization\zhTW.lua
+
+Core\Util.lua
+Core\Scope.lua
+Core\Store.lua
+Core\Scan.lua
+Core\Tooltip.lua
+Core\Options.lua
+
+Core\Events.lua

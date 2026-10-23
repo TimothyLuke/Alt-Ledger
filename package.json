@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "scripts": {
+    "upload-locale": "node uploadLocale.js"
+  }
+}

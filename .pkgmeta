@@ -1,0 +1,18 @@
+package-as: alt-ledger
+
+# AceEvent is the only library: everything else (settings, tooltips, timers)
+# is native.
+externals:
+  Lib/LibStub: https://repos.wowace.com/wow/libstub/trunk
+  Lib/CallbackHandler-1.0: https://repos.wowace.com/wow/callbackhandler/trunk/CallbackHandler-1.0
+  Lib/AceEvent-3.0: https://repos.wowace.com/wow/ace3/trunk/AceEvent-3.0
+
+enable-nolib-creation: no
+
+ignore:
+  - README.md
+  - spec
+  - .luacheckrc
+  - .busted
+  - package.json
+  - uploadLocale.js
